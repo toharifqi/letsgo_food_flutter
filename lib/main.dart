@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:letsgo_food/model/restaurant.dart';
+import 'package:letsgo_food/pages/detail_page.dart';
 import 'package:letsgo_food/pages/list_page.dart';
 import 'package:letsgo_food/theme/style.dart';
 
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
       initialRoute: ListPage.routeName,
       routes: {
         ListPage.routeName: (context) => const ListPage(),
+        DetailPage.routeName: (context) => DetailPage(
+          restaurant: ModalRoute.of(context)?.settings.arguments as Restaurant,
+        )
       },
     );
   }

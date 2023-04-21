@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letsgo_food/model/restaurant.dart';
+import 'package:letsgo_food/pages/detail_page.dart';
 import 'package:letsgo_food/theme/style.dart';
 
 class RestaurantItem extends StatelessWidget {
@@ -12,7 +13,11 @@ class RestaurantItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        
+        Navigator.pushNamed(
+          context,
+          DetailPage.routeName,
+          arguments: restaurant
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -27,15 +32,18 @@ class RestaurantItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      restaurant.pictureId,
-                      height: 80,
-                      width: 100,
-                      fit: BoxFit.fill,
-                      errorBuilder: (context, error, _) => const Center(
-                        child: Icon(Icons.broken_image),
+                  child: Hero(
+                    tag: restaurant.id,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        restaurant.pictureId,
+                        height: 80,
+                        width: 100,
+                        fit: BoxFit.fill,
+                        errorBuilder: (context, error, _) => const Center(
+                          child: Icon(Icons.broken_image),
+                        ),
                       ),
                     ),
                   ),
