@@ -114,7 +114,7 @@ class ListPage extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Center(child: Text(snapshot.error.toString()));
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: Text("No Data"));
             }
         }
       },
