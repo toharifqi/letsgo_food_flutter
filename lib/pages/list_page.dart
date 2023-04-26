@@ -94,25 +94,28 @@ class ListPage extends StatelessWidget {
       builder: (context, snapshot) {
         final List<Restaurant> restaurants = Restaurant.fromRawJson(snapshot.data);
 
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          if (snapshot.hasData) {
-            return MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: ListView.builder(
-                  itemCount: restaurants.length,
-                  itemBuilder: (context, index) => RestaurantItem(
-                      restaurant: restaurants[index],
-                      context: context),
-                )
-            );
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
-          } else {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+          case ConnectionState.active:
             return const Center(child: CircularProgressIndicator());
-          }
+          case ConnectionState.done:
+            if (snapshot.hasData) {
+              return MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: ListView.builder(
+                    itemCount: restaurants.length,
+                    itemBuilder: (context, index) => RestaurantItem(
+                        restaurant: restaurants[index],
+                        context: context),
+                  )
+              );
+            } else if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
         }
       },
     );
