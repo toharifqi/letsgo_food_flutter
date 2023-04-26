@@ -93,16 +93,27 @@ class ListPage extends StatelessWidget {
       future: DefaultAssetBundle.of(context).loadString("assets/local_restaurant.json"),
       builder: (context, snapshot) {
         final List<Restaurant> restaurants = Restaurant.fromRawJson(snapshot.data);
-        return MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: ListView.builder(
-            itemCount: restaurants.length,
-            itemBuilder: (context, index) => RestaurantItem(
-                restaurant: restaurants[index],
-                context: context),
-          )
-        );
+
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          if (snapshot.hasData) {
+            return MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: ListView.builder(
+                  itemCount: restaurants.length,
+                  itemBuilder: (context, index) => RestaurantItem(
+                      restaurant: restaurants[index],
+                      context: context),
+                )
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        }
       },
     );
   }

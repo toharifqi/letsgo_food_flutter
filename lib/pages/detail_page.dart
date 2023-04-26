@@ -20,7 +20,6 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     Restaurant restaurant = widget.restaurant;
-    Menus menus = restaurant.menus;
 
     return Scaffold(
       body: NestedScrollView(
