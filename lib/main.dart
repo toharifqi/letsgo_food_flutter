@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letsgo_food/data/api/api_service.dart';
-import 'package:letsgo_food/provider/restaurant_list_provider.dart';
+import 'package:letsgo_food/provider/restaurant_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
 
 import 'common/navigation.dart';
@@ -16,25 +16,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: Theme.of(context).colorScheme.copyWith(
-          primary: primaryColor,
-          onPrimary: Colors.white,
-          secondary: secondaryColor,
+    return ChangeNotifierProvider(
+      create: (context) => RestaurantProvider(apiService: ApiService()),
+      child: MaterialApp(
+        theme: ThemeData(
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+            primary: primaryColor,
+            onPrimary: Colors.white,
+            secondary: secondaryColor,
+          ),
         ),
+        navigatorKey: navigatorKey,
+        initialRoute: ListPage.routeName,
+        routes: {
+          ListPage.routeName: (context) =>  const ListPage(),
+          DetailPage.routeName: (context) => DetailPage(
+            restaurantId: ModalRoute.of(context)?.settings.arguments as String,
+          ),
+        },
       ),
-      navigatorKey: navigatorKey,
-      initialRoute: ListPage.routeName,
-      routes: {
-        ListPage.routeName: (context) => ChangeNotifierProvider(
-          create: (_) => RestaurantListProvider(apiService: ApiService()),
-          child: const ListPage(),
-        ),
-        DetailPage.routeName: (context) => DetailPage(
-          restaurantId: ModalRoute.of(context)?.settings.arguments as String,
-        ),
-      },
     );
   }
 }

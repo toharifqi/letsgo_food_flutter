@@ -46,7 +46,7 @@ class Restaurant {
 }
 
 class Category {
-  String? name;
+  String name;
 
   Category({
     required this.name,

@@ -5,6 +5,14 @@ import '../model/restaurant_result.dart';
 class ApiService {
   static const String _baseUrl = "https://restaurant-api.dicoding.dev/";
 
+  static ApiService? _instance;
+
+  ApiService._internal() {
+    _instance = this;
+  }
+
+  factory ApiService() => _instance ?? ApiService._internal();
+
   Future<RestaurantsResult> getAllRestaurants() async {
     final response = await http.get(Uri.parse("${_baseUrl}list"));
 

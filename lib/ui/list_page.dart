@@ -3,7 +3,7 @@ import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/widget/list_item.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/restaurant_list_provider.dart';
+import '../provider/restaurant_provider.dart';
 import '../provider/result_state.dart';
 
 class ListPage extends StatelessWidget {
@@ -92,9 +92,9 @@ class ListPage extends StatelessWidget {
   }
 
   Widget _buildList(BuildContext context) {
-    return Consumer<RestaurantListProvider>(
-      builder: (context, listProvider, _) {
-        switch (listProvider.state) {
+    return Consumer<RestaurantProvider>(
+      builder: (context, provider, _) {
+        switch (provider.state) {
           case ResultState.loading:
             return const Center(
                 child: CircularProgressIndicator(
@@ -106,7 +106,7 @@ class ListPage extends StatelessWidget {
           case ResultState.noData:
             return Center(
               child: Material(
-                child: Text(listProvider.message),
+                child: Text(provider.message),
               ),
             );
 
@@ -115,10 +115,11 @@ class ListPage extends StatelessWidget {
                 context: context,
                 removeTop: true,
                 child: ListView.builder(
-                  itemCount: listProvider.result.length,
+                  itemCount: provider.resultList.length,
                   itemBuilder: (context, index) => RestaurantItem(
-                      restaurant: listProvider.result[index],
-                      context: context),
+                      restaurant: provider.resultList[index],
+                      context: context
+                  ),
                 )
             );
         }
