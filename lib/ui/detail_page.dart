@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:letsgo_food/model/restaurant.dart';
 import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/widget/menu_item.dart';
 
 class DetailPage extends StatefulWidget {
   static const routeName = "/detail_page";
 
-  final Restaurant restaurant;
+  final String restaurantId;
 
-  const DetailPage({super.key, required this.restaurant});
+  const DetailPage({super.key, required this.restaurantId});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -19,8 +18,6 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    Restaurant restaurant = widget.restaurant;
-
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, isScrolled) {

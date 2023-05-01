@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:letsgo_food/model/restaurant.dart';
 import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/widget/list_item.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/restaurant_list_provider.dart';
+import '../provider/result_state.dart';
 
 class ListPage extends StatelessWidget {
   static const routeName = "/list_page";
@@ -88,34 +91,36 @@ class ListPage extends StatelessWidget {
     );
   }
 
-  FutureBuilder<String> _buildList(BuildContext context) {
-    return FutureBuilder<String>(
-      future: DefaultAssetBundle.of(context).loadString("assets/local_restaurant.json"),
-      builder: (context, snapshot) {
-        final List<Restaurant> restaurants = Restaurant.fromRawJson(snapshot.data);
+  Widget _buildList(BuildContext context) {
+    return Consumer<RestaurantListProvider>(
+      builder: (context, listProvider, _) {
+        switch (listProvider.state) {
+          case ResultState.loading:
+            return const Center(
+                child: CircularProgressIndicator(
+                  color: secondaryColor,
+                )
+            );
 
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-          case ConnectionState.active:
-            return const Center(child: CircularProgressIndicator());
-          case ConnectionState.done:
-            if (snapshot.hasData) {
-              return MediaQuery.removePadding(
-                  context: context,
-                  removeTop: true,
-                  child: ListView.builder(
-                    itemCount: restaurants.length,
-                    itemBuilder: (context, index) => RestaurantItem(
-                        restaurant: restaurants[index],
-                        context: context),
-                  )
-              );
-            } else if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            } else {
-              return const Center(child: Text("No Data"));
-            }
+          case ResultState.error:
+          case ResultState.noData:
+            return Center(
+              child: Material(
+                child: Text(listProvider.message),
+              ),
+            );
+
+          case ResultState.hasData:
+            return MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: ListView.builder(
+                  itemCount: listProvider.result.length,
+                  itemBuilder: (context, index) => RestaurantItem(
+                      restaurant: listProvider.result[index],
+                      context: context),
+                )
+            );
         }
       },
     );

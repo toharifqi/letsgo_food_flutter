@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:letsgo_food/model/restaurant.dart';
-import 'package:letsgo_food/pages/detail_page.dart';
+import 'package:letsgo_food/common/navigation.dart';
 import 'package:letsgo_food/theme/style.dart';
+
+import '../data/model/restaurant_model.dart';
+import '../ui/detail_page.dart';
 
 class RestaurantItem extends StatelessWidget {
   final BuildContext context;
   final Restaurant restaurant;
+  final _imageBaseUrl = "https://restaurant-api.dicoding.dev/images/small/";
 
   const RestaurantItem({super.key, required this.restaurant, required this.context});
 
@@ -13,10 +16,9 @@ class RestaurantItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(
-          context,
+        Navigation.intentWithData(
           DetailPage.routeName,
-          arguments: restaurant
+          restaurant.id
         );
       },
       child: Padding(
@@ -37,7 +39,7 @@ class RestaurantItem extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        restaurant.pictureId,
+                        "$_imageBaseUrl${restaurant.pictureId}",
                         height: 80,
                         width: 100,
                         fit: BoxFit.fill,
