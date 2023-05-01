@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:letsgo_food/provider/restaurant_detail_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/widget/menu_item.dart';
 import 'package:provider/provider.dart';
 
 import '../data/model/restaurant_model.dart';
-import '../provider/restaurant_provider.dart';
 import '../provider/result_state.dart';
 
 class DetailPage extends StatefulWidget {
@@ -25,16 +25,16 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    context.read<RestaurantProvider>()
+    context.read<RestaurantDetailProvider>()
         .getDetailRestaurant(widget.restaurantId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<RestaurantProvider>(
-        builder: (context, provider, _) {
-          switch (provider.state) {
+      body: Consumer<RestaurantDetailProvider>(
+        builder: (context, detailProvider, _) {
+          switch (detailProvider.state) {
             case ResultState.loading:
               return const Center(
                   child: CircularProgressIndicator(
@@ -45,11 +45,13 @@ class _DetailPageState extends State<DetailPage> {
             case ResultState.error:
             case ResultState.noData:
               return Center(
-                child: Text(provider.message),
+                child: Material(
+                  child: Text(detailProvider.message),
+                ),
               );
 
             case ResultState.hasData:
-              return _buildContent(provider.resultDetail);
+              return _buildContent(detailProvider.result);
           }
         },
       ),

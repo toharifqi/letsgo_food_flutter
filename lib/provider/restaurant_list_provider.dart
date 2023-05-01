@@ -5,18 +5,15 @@ import '../data/api/api_service.dart';
 import '../data/model/restaurant_model.dart';
 import 'result_state.dart';
 
-class RestaurantProvider extends ChangeNotifier {
+class RestaurantListProvider extends ChangeNotifier {
   final ApiService apiService;
 
-  RestaurantProvider({required this.apiService}) {
+  RestaurantListProvider({required this.apiService}) {
     _fetchAllRestaurants();
   }
 
-  late List<Restaurant> _restaurantList;
-  List<Restaurant> get resultList => _restaurantList;
-
-  late Restaurant _restaurant;
-  Restaurant get resultDetail => _restaurant;
+  late List<Restaurant> _restaurants;
+  List<Restaurant> get result => _restaurants;
 
   late ResultState _state;
   ResultState get state => _state;
@@ -37,7 +34,7 @@ class RestaurantProvider extends ChangeNotifier {
       } else {
         _state = ResultState.hasData;
         notifyListeners();
-        return _restaurantList = restaurantsResult.restaurants;
+        return _restaurants = restaurantsResult.restaurants;
       }
     } on SocketException catch (_) {
       _state = ResultState.error;
@@ -63,33 +60,7 @@ class RestaurantProvider extends ChangeNotifier {
       } else {
         _state = ResultState.hasData;
         notifyListeners();
-        return _restaurantList = foundedRestaurantResult.restaurants;
-      }
-    } on SocketException catch (_) {
-      _state = ResultState.error;
-      notifyListeners();
-      return _message = "No internet connection.";
-    } catch (_) {
-      _state = ResultState.error;
-      notifyListeners();
-      return _message = "Failed to search restaurant.";
-    }
-  }
-
-  Future<dynamic> getDetailRestaurant(String restaurantId) async {
-    try {
-      _state = ResultState.loading;
-      notifyListeners();
-      final restaurantDetailResult = await apiService.getRestaurantDetail(restaurantId);
-
-      if (restaurantDetailResult.error) {
-        _state = ResultState.noData;
-        notifyListeners();
-        return _message = "Restaurant is not available.";
-      } else {
-        _state = ResultState.hasData;
-        notifyListeners();
-        _restaurant = restaurantDetailResult.restaurant;
+        return _restaurants = foundedRestaurantResult.restaurants;
       }
     } on SocketException catch (_) {
       _state = ResultState.error;

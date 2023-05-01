@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:letsgo_food/data/api/api_service.dart';
-import 'package:letsgo_food/provider/restaurant_provider.dart';
+import 'package:letsgo_food/provider/restaurant_detail_provider.dart';
+import 'package:letsgo_food/provider/restaurant_list_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
 
 import 'common/navigation.dart';
@@ -16,8 +17,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => RestaurantProvider(apiService: ApiService()),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => RestaurantListProvider(apiService: ApiService())),
+        ChangeNotifierProvider(create: (_) => RestaurantDetailProvider(apiService: ApiService())),
+      ],
       child: MaterialApp(
         theme: ThemeData(
           colorScheme: Theme.of(context).colorScheme.copyWith(
@@ -29,7 +33,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         initialRoute: ListPage.routeName,
         routes: {
-          ListPage.routeName: (context) =>  const ListPage(),
+          ListPage.routeName: (context) => const ListPage(),
           DetailPage.routeName: (context) => DetailPage(
             restaurantId: ModalRoute.of(context)?.settings.arguments as String,
           ),
