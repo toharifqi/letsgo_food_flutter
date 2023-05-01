@@ -9,7 +9,7 @@ class RestaurantListProvider extends ChangeNotifier {
   final ApiService apiService;
 
   RestaurantListProvider({required this.apiService}) {
-    _fetchAllRestaurants();
+    fetchAllRestaurants();
   }
 
   late List<Restaurant> _restaurants;
@@ -21,7 +21,7 @@ class RestaurantListProvider extends ChangeNotifier {
   String _message = "";
   String get message => _message;
 
-  Future<dynamic> _fetchAllRestaurants() async {
+  Future<dynamic> fetchAllRestaurants() async {
     try {
       _state = ResultState.loading;
       notifyListeners();
@@ -30,7 +30,7 @@ class RestaurantListProvider extends ChangeNotifier {
       if (restaurantsResult.restaurants.isEmpty) {
         _state = ResultState.noData;
         notifyListeners();
-        return _message = "empty data";
+        return _message = "Nothing to show.";
       } else {
         _state = ResultState.hasData;
         notifyListeners();
@@ -56,7 +56,7 @@ class RestaurantListProvider extends ChangeNotifier {
       if (foundedRestaurantResult.restaurants.isEmpty) {
         _state = ResultState.noData;
         notifyListeners();
-        return _message = "empty data";
+        return _message = "Can't find this restaurant: $query";
       } else {
         _state = ResultState.hasData;
         notifyListeners();

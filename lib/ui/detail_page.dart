@@ -47,7 +47,12 @@ class _DetailPageState extends State<DetailPage> {
             case ResultState.noData:
               return Center(
                 child: Material(
-                  child: Text(detailProvider.message),
+                  child: Text(
+                    detailProvider.message,
+                    style: const TextStyle(
+                        fontSize: 18
+                    ),
+                  ),
                 ),
               );
 
@@ -63,6 +68,7 @@ class _DetailPageState extends State<DetailPage> {
     final menus = restaurant.menus;
     final reviews = restaurant.customerReviews;
     final categories = restaurant.categories;
+
     return NestedScrollView(
       headerSliverBuilder: (context, isScrolled) {
         return [
@@ -80,6 +86,7 @@ class _DetailPageState extends State<DetailPage> {
         ];
       },
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -155,6 +162,7 @@ class _DetailPageState extends State<DetailPage> {
                 SizedBox(
                   height: 40,
                   child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemCount: menus.drinks.length,
                       itemBuilder: (context, index) => MenuItem(
@@ -175,6 +183,7 @@ class _DetailPageState extends State<DetailPage> {
                 SizedBox(
                   height: 40,
                   child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemCount: menus.foods.length,
                       itemBuilder: (context, index) => MenuItem(

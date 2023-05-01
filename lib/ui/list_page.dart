@@ -6,19 +6,64 @@ import 'package:provider/provider.dart';
 import '../provider/restaurant_list_provider.dart';
 import '../provider/result_state.dart';
 
-class ListPage extends StatelessWidget {
+class ListPage extends StatefulWidget {
   static const routeName = "/list_page";
 
   const ListPage({super.key});
 
   @override
+  State<ListPage> createState() => _ListPageState();
+}
+
+class _ListPageState extends State<ListPage> {
+  bool _isSearchFieldEmpty = false;
+  final _searchFieldController = TextEditingController();
+  final _scrollController = ScrollController();
+
+  void _onSearchFieldChange() {
+    setState(() {
+      if (_searchFieldController.text.trim() != "") {
+        _isSearchFieldEmpty = false;
+      } else {
+        _isSearchFieldEmpty = true;
+      }
+    });
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0.0,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(seconds: 1),
+    );
+  }
+
+  void _hideKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFieldController.addListener(_onSearchFieldChange);
+  }
+
+  @override
+  void dispose() {
+    _searchFieldController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: NestedScrollView(
+        controller: _scrollController,
         headerSliverBuilder: (context, isScrolled) {
           return [
             SliverAppBar(
-              pinned: false,
+              elevation: 0,
+              pinned: true,
               backgroundColor: Colors.transparent,
               expandedHeight: 160,
               flexibleSpace: _buildCustomAppBar(),
@@ -49,27 +94,7 @@ class ListPage extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Let's go Food",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "Recommendation restaurant for you!",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: _buildSearchBar(),
                   ),
                   Expanded(
                       child: Container(
@@ -91,6 +116,48 @@ class ListPage extends StatelessWidget {
     );
   }
 
+  Widget _buildSearchBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: TextField(
+        controller: _searchFieldController,
+        onSubmitted: (query) {
+          context
+              .read<RestaurantListProvider>()
+              .searchRestaurants(query);
+          _scrollToTop();
+        },
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          hintText: "Search restaurant...",
+          filled: true,
+          suffixIcon: InkWell(
+            child: _isSearchFieldEmpty
+                ? Icon(Icons.search, color: Colors.grey[500])
+                : Icon(Icons.close, color: Colors.grey[500]),
+            onTap: () {
+              if (!_isSearchFieldEmpty) {
+                _searchFieldController.clear();
+                context
+                    .read<RestaurantListProvider>()
+                    .fetchAllRestaurants();
+                _scrollToTop();
+                _hideKeyboard();
+              }
+            },
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildList(BuildContext context) {
     return Consumer<RestaurantListProvider>(
       builder: (context, listProvider, _) {
@@ -106,7 +173,12 @@ class ListPage extends StatelessWidget {
           case ResultState.noData:
             return Center(
               child: Material(
-                child: Text(listProvider.message),
+                child: Text(
+                  listProvider.message,
+                  style: const TextStyle(
+                    fontSize: 18
+                  ),
+                ),
               ),
             );
 
@@ -115,6 +187,8 @@ class ListPage extends StatelessWidget {
                 context: context,
                 removeTop: true,
                 child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
                   itemCount: listProvider.result.length,
                   itemBuilder: (context, index) => RestaurantItem(
                       restaurant: listProvider.result[index],
@@ -126,5 +200,4 @@ class ListPage extends StatelessWidget {
       },
     );
   }
-
 }
