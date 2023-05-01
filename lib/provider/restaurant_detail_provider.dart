@@ -42,7 +42,7 @@ class RestaurantDetailProvider extends ChangeNotifier {
     } catch (_) {
       _state = ResultState.error;
       notifyListeners();
-      return _message = "Failed to search restaurant.";
+      return _message = "Failed to load restaurant.";
     }
   }
 }
