@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letsgo_food/provider/restaurant_detail_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/widget/menu_item.dart';
+import 'package:letsgo_food/widget/review_item.dart';
 import 'package:provider/provider.dart';
 
 import '../data/model/restaurant_model.dart';
@@ -60,6 +61,8 @@ class _DetailPageState extends State<DetailPage> {
 
   Widget _buildContent(Restaurant restaurant) {
     final menus = restaurant.menus;
+    final reviews = restaurant.customerReviews;
+    final categories = restaurant.categories;
     return NestedScrollView(
       headerSliverBuilder: (context, isScrolled) {
         return [
@@ -96,12 +99,33 @@ class _DetailPageState extends State<DetailPage> {
                 children: [
                   const Icon(
                     Icons.location_on,
-                    color: secondaryColor,
-                    size: 18,
+                    color: accentColor,
+                    size: 24,
                   ),
+                  const SizedBox(width: 4),
                   Expanded(
                     child: Text(
                       "${restaurant.city}, ${restaurant.address}",
+                      style: const TextStyle(
+                          fontSize: 18
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.fastfood_rounded,
+                    color: accentColor,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      categories.map((category) => category.name).join(", "),
                       style: const TextStyle(
                           fontSize: 18
                       ),
@@ -117,6 +141,7 @@ class _DetailPageState extends State<DetailPage> {
                     fontSize: 18
                 ),
               ),
+
               const SizedBox(height: 28),
               const Text(
                 "Foods",
@@ -155,6 +180,24 @@ class _DetailPageState extends State<DetailPage> {
                       itemBuilder: (context, index) => MenuItem(
                           name: menus.foods[index].name)
                   ),
+                ),
+
+              const Padding(
+                padding: EdgeInsets.only(top: 16, bottom: 12),
+                child: Divider(color: Colors.black45),
+              ),
+              const Text(
+                "Reviews",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+              if (reviews.isNotEmpty)
+                Column(
+                  children: reviews.map(
+                          (review) => ReviewItem(reviewData: review)
+                  ).toList(),
                 ),
             ],
           ),
