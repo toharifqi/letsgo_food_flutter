@@ -26,8 +26,9 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    context.read<RestaurantDetailProvider>()
-        .getDetailRestaurant(widget.restaurantId);
+    Future.microtask(() => context
+        .read<RestaurantDetailProvider>()
+        .getDetailRestaurant(widget.restaurantId));
   }
 
   @override
