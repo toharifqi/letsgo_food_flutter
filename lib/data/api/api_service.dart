@@ -27,7 +27,7 @@ class ApiService {
       String restaurantId
   ) async {
     final response =
-        await http.get(Uri.parse("${_baseUrl}/detail/$restaurantId"));
+        await http.get(Uri.parse("$_baseUrl/detail/$restaurantId"));
 
     if (response.statusCode == 200) {
       return RestaurantDetailResult.fromRawJson(response.body);
@@ -40,7 +40,7 @@ class ApiService {
       String query
   ) async {
     final response =
-    await http.get(Uri.parse("${_baseUrl}/search?q=$query"));
+    await http.get(Uri.parse("$_baseUrl/search?q=$query"));
 
     if (response.statusCode == 200) {
       return FoundedRestaurantResult.fromRawJson(response.body);
