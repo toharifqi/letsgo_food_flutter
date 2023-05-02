@@ -68,11 +68,12 @@ class CustomerReview {
     required this.date,
   });
 
-  factory CustomerReview._fromJson(Map<String, dynamic> json) => CustomerReview(
-    name: json["name"],
-    review: json["review"],
-    date: json["date"],
-  );
+  factory CustomerReview._fromJson(Map<String, dynamic> json) => 
+      CustomerReview(
+        name: json["name"],
+        review: json["review"],
+        date: json["date"],
+      );
 }
 
 class Menus {
@@ -86,6 +87,8 @@ class Menus {
 
   factory Menus._fromJson(Map<String, dynamic> json) => Menus(
     foods: List<Category>.from(json["foods"].map((x) => Category._fromJson(x))),
-    drinks: List<Category>.from(json["drinks"].map((x) => Category._fromJson(x))),
+    drinks: List<Category>.from(
+        json["drinks"].map((x) => Category._fromJson(x))
+    ),
   );
 }
