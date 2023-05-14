@@ -7,9 +7,7 @@ class Navigation {
     navigatorKey.currentState?.pushNamed(routeName, arguments: arguments);
   }
 
-  static navigate(String routeName) {
-    navigatorKey.currentState?.pushNamed(routeName);
+  static navigateReplace(String routeName) {
+    navigatorKey.currentState?.pushReplacementNamed(routeName);
   }
-
-  static back() => navigatorKey.currentState?.pop();
 }

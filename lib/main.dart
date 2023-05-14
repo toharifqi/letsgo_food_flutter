@@ -7,6 +7,7 @@ import 'package:letsgo_food/provider/restaurant_detail_provider.dart';
 import 'package:letsgo_food/provider/restaurant_list_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/ui/favorite_page.dart';
+import 'package:letsgo_food/ui/settings_page.dart';
 
 import 'common/navigation.dart';
 import 'ui/detail_page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
             restaurant: ModalRoute.of(context)?.settings.arguments as Restaurant,
           ),
           FavoritePage.routeName: (context) => const FavoritePage(),
+          SettingPage.routeName: (context) => const SettingPage(),
         },
       ),
     );
