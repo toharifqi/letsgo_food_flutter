@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:letsgo_food/data/api/api_service.dart';
 import 'package:letsgo_food/data/db/database_helper.dart';
 import 'package:letsgo_food/data/model/restaurant_model.dart';
+import 'package:letsgo_food/data/preferences/preference_helper.dart';
 import 'package:letsgo_food/provider/database_provider.dart';
+import 'package:letsgo_food/provider/preferences_provider.dart';
 import 'package:letsgo_food/provider/restaurant_detail_provider.dart';
 import 'package:letsgo_food/provider/restaurant_list_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/ui/favorite_page.dart';
 import 'package:letsgo_food/ui/settings_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/navigation.dart';
 import 'ui/detail_page.dart';
@@ -15,7 +18,11 @@ import 'ui/list_page.dart';
 
 import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  //WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,6 +34,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RestaurantListProvider(apiService: ApiService())),
         ChangeNotifierProvider(create: (_) => RestaurantDetailProvider(apiService: ApiService())),
         ChangeNotifierProvider(create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper())),
+        ChangeNotifierProvider(create: (_) => PreferencesProvider(
+          preferencesHelper: PreferencesHelper(
+            sharedPreferences: SharedPreferences.getInstance()
+          )
+        ))
       ],
       child: MaterialApp(
         theme: ThemeData(

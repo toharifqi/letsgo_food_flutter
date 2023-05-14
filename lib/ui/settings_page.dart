@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:letsgo_food/provider/preferences_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/widget/favorite_button.dart';
+import 'package:provider/provider.dart';
 
 import '../widget/home_button.dart';
 
@@ -30,22 +32,26 @@ class SettingPage extends StatelessWidget {
         child: Column(
           children: [
             Material(
-              child: ListTile(
-                title: const Text(
-                  "Restaurant Notification",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-                subtitle: const Text(
-                    "Enable notification"
-                ),
-                trailing: Switch.adaptive(
-                  value: false,
-                  onChanged: (value) async {
-
-                  },
-                ),
+              child: Consumer<PreferencesProvider>(
+                builder: (context, preferenceProvider, _) {
+                  return ListTile(
+                    title: const Text(
+                      "Restaurant Notification",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    subtitle: const Text(
+                        "Enable notification"
+                    ),
+                    trailing: Switch.adaptive(
+                      value: preferenceProvider.isNotificationActive,
+                      onChanged: (value) {
+                        preferenceProvider.setNotification(value);
+                      },
+                    ),
+                  );
+                },
               ),
             )
           ],
