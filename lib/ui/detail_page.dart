@@ -143,7 +143,7 @@ class _DetailPageState extends State<DetailPage> {
               ),
               const SizedBox(height: 28),
               Text(
-                restaurant.description,
+                restaurant.description ?? "",
                 textAlign: TextAlign.justify,
                 style: const TextStyle(
                     fontSize: 18

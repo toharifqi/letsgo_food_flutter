@@ -1,7 +1,7 @@
 class Restaurant {
   String id;
   String name;
-  String description;
+  String? description;
   String city;
   String? address;
   String pictureId;
@@ -43,6 +43,14 @@ class Restaurant {
                 json["customerReviews"]!.map((x) => CustomerReview._fromJson(x))
               ),
       );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "city": city,
+    "pictureId": pictureId,
+    "rating": rating,
+  };
 }
 
 class Category {
