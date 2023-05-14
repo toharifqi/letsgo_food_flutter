@@ -10,6 +10,7 @@ class SettingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+      key: const Key("SettingsButton"),
       heroTag: "settingButton",
       onPressed: () {
         Navigation.navigateReplace(SettingPage.routeName);

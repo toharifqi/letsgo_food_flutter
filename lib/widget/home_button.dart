@@ -10,6 +10,7 @@ class HomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+      key: const Key("HomeButton"),
       heroTag: "homeButton",
       onPressed: () {
         Navigation.navigateReplace(ListPage.routeName);

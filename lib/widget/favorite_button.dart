@@ -9,6 +9,7 @@ class FavoriteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+      key: const Key("FavoriteButton"),
       heroTag: "favoriteButton",
       onPressed: () {
         Navigation.navigateReplace(FavoritePage.routeName);
