@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:letsgo_food/theme/style.dart';
+import 'package:letsgo_food/ui/detail_page.dart';
+import 'package:letsgo_food/utils/notification_helper.dart';
 import 'package:letsgo_food/widget/favorite_button.dart';
 import 'package:letsgo_food/widget/list_item.dart';
 import 'package:letsgo_food/widget/setting_button.dart';
@@ -21,6 +23,7 @@ class _ListPageState extends State<ListPage> {
   bool _isSearchFieldEmpty = false;
   final _searchFieldController = TextEditingController();
   final _scrollController = ScrollController();
+  final _notificationHelper = NotificationHelper();
 
   void _onSearchFieldChange() {
     setState(() {
@@ -47,6 +50,9 @@ class _ListPageState extends State<ListPage> {
   @override
   void initState() {
     super.initState();
+    _notificationHelper.configureSelectNotificationSubject(
+      DetailPage.routeName
+    );
     _searchFieldController.addListener(_onSearchFieldChange);
   }
 

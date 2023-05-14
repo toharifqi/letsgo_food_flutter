@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:letsgo_food/data/api/api_service.dart';
 import 'package:letsgo_food/data/db/database_helper.dart';
 import 'package:letsgo_food/data/model/restaurant_model.dart';
@@ -18,8 +22,24 @@ import 'ui/list_page.dart';
 
 import 'package:provider/provider.dart';
 
-void main() {
-  //WidgetsFlutterBinding.ensureInitialized();
+import 'utils/background_service.dart';
+import 'utils/notification_helper.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final NotificationHelper notificationHelper = NotificationHelper();
+  final BackgroundService service = BackgroundService();
+
+  service.initializeIsolate();
+  if (Platform.isAndroid) {
+    await AndroidAlarmManager.initialize();
+  }
+
+  await notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
 
   runApp(const MyApp());
 }

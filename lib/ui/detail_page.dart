@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:letsgo_food/provider/database_provider.dart';
 import 'package:letsgo_food/provider/restaurant_detail_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
+import 'package:letsgo_food/ui/list_page.dart';
 import 'package:letsgo_food/widget/menu_item.dart';
 import 'package:letsgo_food/widget/review_item.dart';
 import 'package:provider/provider.dart';
 
+import '../common/navigation.dart';
 import '../data/model/restaurant_model.dart';
 import '../provider/result_state.dart';
 

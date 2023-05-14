@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:letsgo_food/provider/preferences_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
+import 'package:letsgo_food/utils/scheduler_helper.dart';
 import 'package:letsgo_food/widget/favorite_button.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,7 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(200),
+        preferredSize: const Size.fromHeight(200),
         child: _buildCustomAppBar(),
       ),
       floatingActionButton: Wrap(
@@ -47,6 +48,7 @@ class SettingPage extends StatelessWidget {
                     trailing: Switch.adaptive(
                       value: preferenceProvider.isNotificationActive,
                       onChanged: (value) {
+                        SchedulerHelper().scheduleNotification(value);
                         preferenceProvider.setNotification(value);
                       },
                     ),
