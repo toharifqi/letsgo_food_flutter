@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:letsgo_food/common/navigation.dart';
 import 'package:letsgo_food/theme/style.dart';
+import 'package:letsgo_food/ui/favorite_page.dart';
 import 'package:letsgo_food/widget/list_item.dart';
 import 'package:provider/provider.dart';
 
@@ -76,6 +78,14 @@ class _ListPageState extends State<ListPage> {
           ];
         },
         body: _buildList(context),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigation.navigate(FavoritePage.routeName);
+        },
+        label: const Text("Favorites"),
+        icon: const Icon(Icons.favorite),
+        backgroundColor: Colors.pink,
       ),
     );
   }

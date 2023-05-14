@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:letsgo_food/data/api/api_service.dart';
+import 'package:letsgo_food/data/db/database_helper.dart';
+import 'package:letsgo_food/data/model/restaurant_model.dart';
+import 'package:letsgo_food/provider/database_provider.dart';
 import 'package:letsgo_food/provider/restaurant_detail_provider.dart';
 import 'package:letsgo_food/provider/restaurant_list_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
+import 'package:letsgo_food/ui/favorite_page.dart';
 
 import 'common/navigation.dart';
 import 'ui/detail_page.dart';
@@ -21,6 +25,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => RestaurantListProvider(apiService: ApiService())),
         ChangeNotifierProvider(create: (_) => RestaurantDetailProvider(apiService: ApiService())),
+        ChangeNotifierProvider(create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper())),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -35,8 +40,9 @@ class MyApp extends StatelessWidget {
         routes: {
           ListPage.routeName: (context) => const ListPage(),
           DetailPage.routeName: (context) => DetailPage(
-            restaurantId: ModalRoute.of(context)?.settings.arguments as String,
+            restaurant: ModalRoute.of(context)?.settings.arguments as Restaurant,
           ),
+          FavoritePage.routeName: (context) => const FavoritePage(),
         },
       ),
     );

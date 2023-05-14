@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:letsgo_food/provider/database_provider.dart';
 import 'package:letsgo_food/provider/restaurant_detail_provider.dart';
 import 'package:letsgo_food/theme/style.dart';
 import 'package:letsgo_food/widget/menu_item.dart';
@@ -11,9 +12,9 @@ import '../provider/result_state.dart';
 class DetailPage extends StatefulWidget {
   static const routeName = "/detail_page";
 
-  final String restaurantId;
+  final Restaurant restaurant;
 
-  const DetailPage({super.key, required this.restaurantId});
+  const DetailPage({super.key, required this.restaurant});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -22,13 +23,12 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   var top = 0.0;
 
-
   @override
   void initState() {
     super.initState();
     Future.microtask(() => context
         .read<RestaurantDetailProvider>()
-        .getDetailRestaurant(widget.restaurantId));
+        .getDetailRestaurant(widget.restaurant.id));
   }
 
   @override
@@ -62,6 +62,43 @@ class _DetailPageState extends State<DetailPage> {
           }
         },
       ),
+      floatingActionButton: Consumer<DatabaseProvider>(
+        builder: (context, dbProvider, _) {
+          return FutureBuilder(
+            future: dbProvider.isRestaurantFavorite(widget.restaurant.id),
+            builder: (context, snapshot) {
+              var isFavorite = snapshot.data ?? false;
+              return isFavorite
+                  ? removeFavoriteButton(widget.restaurant.id)
+                  : addFavoriteButton(widget.restaurant);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  FloatingActionButton addFavoriteButton(Restaurant restaurant) {
+    return FloatingActionButton(
+        onPressed: () {
+          context
+              .read<DatabaseProvider>()
+              .addFavorite(restaurant);
+        },
+        backgroundColor: Colors.pink,
+        child: const Icon(Icons.favorite_border)
+    );
+  }
+
+  FloatingActionButton removeFavoriteButton(String id) {
+    return FloatingActionButton(
+        onPressed: () {
+          context
+              .read<DatabaseProvider>()
+              .removeFavorite(id);
+        },
+        backgroundColor: Colors.pink,
+        child: const Icon(Icons.favorite)
     );
   }
 
@@ -224,7 +261,7 @@ class _DetailPageState extends State<DetailPage> {
                 top = constraints.biggest.height;
                 return FlexibleSpaceBar(
                   background: Hero(
-                    tag: widget.restaurantId,
+                    tag: widget.restaurant.id,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(18),

@@ -18,7 +18,7 @@ class RestaurantItem extends StatelessWidget {
       onTap: () {
         Navigation.intentWithData(
           DetailPage.routeName,
-          restaurant.id
+          restaurant
         );
       },
       child: Padding(

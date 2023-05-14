@@ -6,4 +6,10 @@ class Navigation {
   static intentWithData(String routeName, Object arguments) {
     navigatorKey.currentState?.pushNamed(routeName, arguments: arguments);
   }
+
+  static navigate(String routeName) {
+    navigatorKey.currentState?.pushNamed(routeName);
+  }
+
+  static back() => navigatorKey.currentState?.pop();
 }
